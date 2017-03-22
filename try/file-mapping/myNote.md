@@ -28,3 +28,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/aa366778(v=vs.85).aspx
 
 At last, if your algorithm permits it, 
 you might csplit the files in smaller pieces and process each of them in parallel processes.
+
+
+
+unix that would be mmap on windows CreateFileMapping/MapViewIntoFile
