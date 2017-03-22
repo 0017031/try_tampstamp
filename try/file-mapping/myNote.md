@@ -35,3 +35,11 @@ unix that would be mmap on windows CreateFileMapping/MapViewIntoFile
 
 
 http://stackoverflow.com/a/26737146/3353857
+
+
+
+So I wrote a parallel parser. It's composed of tasks (using a TBB pipeline):
+
+    fread large chunks (one such task at a time)
+    re-arrange chunks such that a line is not split between chunks (one such task at a time)
+    parse chunk (many such tasks)
