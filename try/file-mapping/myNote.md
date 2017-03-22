@@ -32,3 +32,6 @@ you might csplit the files in smaller pieces and process each of them in paralle
 
 
 unix that would be mmap on windows CreateFileMapping/MapViewIntoFile
+
+
+http://stackoverflow.com/a/26737146/3353857
