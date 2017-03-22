@@ -24,3 +24,7 @@ https://msdn.microsoft.com/en-us/library/windows/desktop/aa384271(v=vs.85).aspx
   
 Memory Limits for Windows and Windows Server Releases  
 https://msdn.microsoft.com/en-us/library/windows/desktop/aa366778(v=vs.85).aspx  
+
+
+At last, if your algorithm permits it, 
+you might csplit the files in smaller pieces and process each of them in parallel processes.
