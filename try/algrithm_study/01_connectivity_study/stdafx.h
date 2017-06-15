@@ -12,6 +12,7 @@
 
 #include <iostream>
 
+#include <gsl\gsl>
 
 
 // TODO: reference additional headers your program requires here
