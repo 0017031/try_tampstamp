@@ -1,7 +1,7 @@
 // STL_study.cpp : Defines the entry point for the console application.
 //
 #include "stdafx.h"
-#include <vector>
+
 
 using namespace std;
 
@@ -62,24 +62,23 @@ int main() {
     }
 
     auto vec2 = /*std::vector<int>*/ {1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4};
-    auto pattern = std::array<int, 3>{1, 2, 3};
 
     {
-        auto p = std::find_end(std::begin(vec2), std::end(vec2), std::begin(pattern), std::end(pattern));
+		auto pattern = std::array<int, 3>{1, 2, 3};
+		auto p = std::find_end(std::begin(vec2), std::end(vec2), std::begin(pattern), std::end(pattern));
         if (p != std::end(vec2)) {
             std::cout << "Found last subsequence at: " << p - begin(vec2) << "\n";
         }
     }
 
     {
-        // auto[x, y, z] = pattern;
-        struct S {
-            int a;
-            char b;
-            double c;
-        };
-        // auto[a, b, c] = S{1, '2', 3.0};
-    }
+		auto pattern = std::array<int, 3>{3, 4, 1};
+		auto p = std::search(std::begin(vec2), std::end(vec2),
+			std::begin(pattern), std::end(pattern));
+		if (p != std::end(vec2)) {
+			std::cout << "Found First subsequence at: " << p - begin(vec2) << "\n";
+		}
+	}
 
     return 0;
 }
