@@ -1,8 +1,18 @@
-// test_Timestamp.cpp
-#include <iostream>
+#define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file
 #include "stdafx.h"
-
 using namespace std;
+
+TEST_CASE("CTimestamp_constuctor", "[CTimestamp]")
+{
+    CTimestamp t2{42};
+	auto t4 = CTimestamp{ t2 };
+
+	REQUIRE(t2.count() == 42);
+	REQUIRE(t4.count() == 42);
+
+}
+
+#if 0
 
 int main(void)
 {
@@ -26,3 +36,4 @@ int main(void)
 
     return 0;
 }
+#endif
