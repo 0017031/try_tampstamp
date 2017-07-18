@@ -26,6 +26,9 @@
     <ClCompile Include="test_Timestamp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\..\gsl\GSL.natvis" />
