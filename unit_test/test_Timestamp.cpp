@@ -1,4 +1,5 @@
 ﻿#include "stdafx.h"
+#include "Timestamp.h"
 using namespace std;
 using namespace std::chrono;
 using namespace date;
@@ -48,8 +49,8 @@ int main(void)
 {
     // Test constructor
 
-    // CTimestampBase(T ts_integer) : m_nTimestamp(ts_integer) {}
-    // CTimestampBase(const CTimestampBase& src) { m_nTimestamp = src.m_nTimestamp; }
+    // CTimestampBase(T ts_integer) : _MyTimestamp(ts_integer) {}
+    // CTimestampBase(const CTimestampBase& src) { _MyTimestamp = src._MyTimestamp; }
 
     // CTimestamp t2;
     auto t2 = CTimestamp{4242};

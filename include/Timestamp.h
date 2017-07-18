@@ -20,41 +20,40 @@ constexpr int TIMESTAMP_STRING_DECIMAL = 6;
 template<typename T = std::int64_t, typename P = std::ratio<1, TIMESTAMP_TO_SECONDS_DIVISOR>>
 class CTimestampBase
 {
-    using MyDuration = std::chrono::duration<T, P>;
+    using _Duration = std::chrono::duration<T, P>;
 
 private:
-    MyDuration m_nTimestamp; // Event timestamp in P (period), default to micro-seconds, represented in int64
+    _Duration _MyTimestamp; // Event timestamp in P (period), default to micro-seconds, represented in int64
 
 public:
-    // CTimestampBase() : m_nTimestamp(0){}; //???
-    CTimestampBase() = default;
-    CTimestampBase(T ts_integer) : m_nTimestamp(ts_integer) {}
-    CTimestampBase(const CTimestampBase& src) { m_nTimestamp = src.m_nTimestamp; }
-    ~CTimestampBase() {}
+    // CTimestampBase() : _MyTimestamp(0){}; //???
+    constexpr CTimestampBase() = default;
+    constexpr CTimestampBase(const CTimestampBase& src) = default;
+    constexpr CTimestampBase(T ts_integer) : _MyTimestamp(ts_integer) {}
+    ~CTimestampBase() = default;
 
-    constexpr T count() const { return m_nTimestamp.count(); }
+    constexpr T count() const { return _MyTimestamp.count(); }
 
     /** Cast operator.
      */
-    //operator T() const { return m_nTimestamp.count(); } //??? dangrous!
+    // operator T() const { return _MyTimestamp.count(); } //??? dangrous!
 
-    CTimestampBase& operator+=(const CTimestampBase& ts)
+	constexpr CTimestampBase& operator+=(const CTimestampBase& ts)
     {
-        bool bOverflow = false;
-
-        if (sizeof(T) == 4)
+        auto max_duration = _Duration{std::numeric_limits<T>::max()};
+        bool bOverflow = (max_duration - _MyTimestamp) <= ts._MyTimestamp ? true : false;
+        /*if (sizeof(T) == 4)
         {
-            if (MyDuration{ULONG_MAX} - m_nTimestamp <= ts.m_nTimestamp) bOverflow = true;
+            if (_Duration{ULONG_MAX} - _MyTimestamp <= ts._MyTimestamp) bOverflow = true;
         }
         else if (sizeof(T) == 8)
         {
-            if (MyDuration{_I64_MAX} - m_nTimestamp <= ts.m_nTimestamp) bOverflow = true;
+            if (_Duration{_I64_MAX} - _MyTimestamp <= ts._MyTimestamp) bOverflow = true;
         }
         else
         {
             assert(0);
-        }
-
+        }*/
         if (bOverflow)
         {
             std::stringstream strm;
@@ -63,19 +62,19 @@ public:
             throw std::out_of_range(strm.str());
         }
 
-        m_nTimestamp += ts.m_nTimestamp;
+        _MyTimestamp += ts._MyTimestamp;
         return *this;
     }
 
     /** -= operator.
      * @return A reference to this timestamp object.
      */
-    CTimestampBase& operator-=(const CTimestampBase ts)
+	constexpr  CTimestampBase& operator-=(const CTimestampBase ts)
     {
-        if (ts.m_nTimestamp > m_nTimestamp)
-            m_nTimestamp = 0;
+        if (ts._MyTimestamp > _MyTimestamp)
+            _MyTimestamp = 0;
         else
-            m_nTimestamp -= ts.m_nTimestamp;
+            _MyTimestamp -= ts._MyTimestamp;
 
         return *this;
     }
@@ -84,19 +83,17 @@ public:
      * @param ts_micro The timestamp in microseconds.
      * @return The timestamp formatted as a string.
      */
-    static std::string ToString(T ts_integer) { return CTimestampBase{ts_integer}.ToString(); }
+	constexpr  static std::string ToString(T ts_integer) { return CTimestampBase{ts_integer}.ToString(); }
 
     /** Convert the timestamp to a string.
      * @return The timestamp formatted as a string.
      */
-    std::string ToString() const
+	constexpr  std::string ToString() const
     {
-        auto converted_to_seconds = std::chrono::duration<double, 1>{m_nTimestamp};
-
+        double converted_to_seconds = this->ToSeconds();
         std::stringstream retval;
         retval << std::fixed << std::setw(TIMESTAMP_STRING_LEN) << std::setprecision(TIMESTAMP_STRING_DECIMAL)
-               << std::setfill('0') << converted_to_seconds.count();
-
+               << std::setfill('0') << converted_to_seconds;
         return retval.str();
     }
 
@@ -105,15 +102,12 @@ public:
      * @param bValidateFormat Validate that the format of the timestamp string is ######.######.
      * @return A reference to this timestamp object.
      */
-    CTimestampBase& FromString(const std::string& sTimeString, bool bValidateFormat = false)
+	constexpr CTimestampBase& FromString(const std::string& sTimeString, bool bValidateFormat = false)
     {
         if (bValidateFormat)
-        {
-            // Assumed format: "######.######"
+        { // Assumed format: "######.######"
             const std::regex myRegexObj{R"(\d{6}\.\d{6})"};
             const bool bValid = std::regex_match(sTimeString, myRegexObj);
-            ;
-
             if (!bValid)
             {
                 std::stringstream strm;
@@ -131,13 +125,13 @@ public:
     /** Convert the timestamp to a floating point value.
      * @return The timestamp as a floating point numeric.
      */
-    double ToSeconds() const { return std::chrono::duration<double, 1>{m_nTimestamp}.count(); }
+	constexpr  double ToSeconds() const { return std::chrono::duration<double, 1>{_MyTimestamp}.count(); }
 
     /** Set the timestamp from a floating point numeric.
      * @param dSeconds The timestamp in seconds.
      * @return A reference to this timestamp object.
      */
-    const CTimestampBase& FromSeconds(double dSeconds)
+	constexpr  CTimestampBase& FromSeconds(double dSeconds)
     {
         if (dSeconds < 0.0)
         {
@@ -146,13 +140,7 @@ public:
             throw std::out_of_range(strm.str());
         }
 
-        if (sizeof(T) == 4)
-            constexpr auto dMaxSeconds = double(ULONG_MAX) / TIMESTAMP_TO_SECONDS_DIVISOR;
-        else if (sizeof(T) == 8)
-            constexpr auto dMaxSeconds = double(_I64_MAX) / TIMESTAMP_TO_SECONDS_DIVISOR;
-        else
-            assert(0);
-
+        double dMaxSeconds = std::chrono::duration<double, 1>{std::numeric_limits<T>::max()}.count();
         if (dSeconds >= dMaxSeconds)
         {
             std::stringstream strm;
@@ -160,16 +148,15 @@ public:
             throw std::out_of_range(strm.str());
         }
 
-        auto converted_to_seconds = std::chrono::duration<double, 1>{dSeconds};
-        auto rounded_value = std::chrono::duration_cast<MyDuration>(converted_to_seconds);
-        return CTimestampBase{rounded_value};
-
+        auto duration_s_double = std::chrono::duration<double, 1>{dSeconds};
+        _MyTimestamp = std::chrono::duration_cast<_Duration>(
+            duration_s_double); // std::chrono::duration_cast(), convert with trunctaion toward zero
         return *this;
     }
 
-    std::ostream& operator<<(std::ostream& os)
+    constexpr std::ostream& operator<<(std::ostream& os)
     {
-        os << m_nTimestamp.count();
+        os << _MyTimestamp.count();
         return os;
     };
 };
