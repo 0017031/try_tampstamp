@@ -2,13 +2,13 @@
 
 #pragma once
 
-#include <cstdint>
+//#include <cstdint>
 #include <memory>
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 //#include "Data_Dictionary_Types.h"
 //#include "Metadata_Dictionary.h"
-//#include "Timestamp.h"
+#include "Timestamp.h"
 //#include "TextFileLine.h"
 //#include "ReadOnlyValueVector.h"
 //#include "WritableValueVector.h"
@@ -49,7 +49,7 @@ public:
     typedef bool TY_Boolean;
     typedef std::string TY_String;
     typedef std::string TY_Enum;
-    typedef std::uint32_t TY_Hex;
+    typedef uint32_t TY_Hex;
     /*typedef unsigned long TY_Hex;*/
     typedef std::string TY_Event;
 
