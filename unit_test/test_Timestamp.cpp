@@ -1,8 +1,8 @@
-#include "Timestamp.h"
 #include "stdafx.h"
 using namespace std;
 using namespace chrono;
 using namespace date;
+using namespace Catch;
 
 using CTimestampTEST = CTimestamp;
 
@@ -11,8 +11,35 @@ constexpr auto my_numeric_limits_min = -CTimestampTEST::_numeric_limits_max - 1;
 // constexpr auto my_numeric_limits_max = std::numeric_limits<CTimestampTEST::rep>::max();
 // constexpr auto my_numeric_limits_min = std::numeric_limits<CTimestampTEST::rep>::min();
 
-constexpr auto my_min = std::numeric_limits<CTimestampTEST::rep>::min();
-constexpr auto my_max = std::numeric_limits<CTimestampTEST::rep>::max();
+constexpr auto my_min = numeric_limits<CTimestampTEST::rep>::min();
+constexpr auto my_max = numeric_limits<CTimestampTEST::rep>::max();
+
+class ExceptionMatcher_StartWith : public MatcherBase<out_of_range>
+{
+    string_view m_expected;
+
+public:
+	explicit ExceptionMatcher_StartWith(const string& _expeted) : m_expected(_expeted) {}
+    bool match(out_of_range const& se) const override
+    {
+        auto se_what = string_view{se.what()};
+        if (se_what.empty() != m_expected.empty()) // one of them is empty, AND the other is not
+        {
+            return false;
+        }
+        else // whethere se.what() started with m_expected?
+        {
+            return se_what.find(m_expected) == 0;
+        }
+    }
+
+    string describe() const override
+    {
+        ostringstream ss;
+        ss << "std::out_of_range exception has value of " << m_expected;
+        return ss.str();
+    }
+};
 
 TEST_CASE("1: Constuctor", "[CTimestampTEST]")
 {
@@ -85,6 +112,7 @@ TEST_CASE("3: operator+=", "[CTimestampTEST]")
     auto near_max = CTimestampTEST{my_numeric_limits_max - 42};
     auto my42ms = CTimestampTEST{42};
     auto my43ms = CTimestampTEST{43};
+	auto tmax = CTimestampTEST{ my_numeric_limits_max };
 
     SECTION("3.1 near max, no throw")
     {
@@ -94,9 +122,16 @@ TEST_CASE("3: operator+=", "[CTimestampTEST]")
 
     SECTION("3.2 overflow, throw")
     {
-        auto tmax = CTimestampTEST{my_numeric_limits_max};
-        CHECK_THROWS(tmax += CTimestampTEST{1});
-        REQUIRE_THROWS(near_max += my43ms);
+
+        //CHECK_THROWS(tmax += CTimestampTEST{1});
+        //CHECK_THROWS(near_max += my43ms);
+        //CHECK_THROWS_WITH(tmax += CTimestampTEST{1}, StartsWith("Timestamp overflow: "));
+        //CHECK_THROWS_WITH(near_max += my43ms, StartsWith("Timestamp overflow: "));
+
+        // StartsWith("Timestamp overflow: ")
+        REQUIRE_THROWS_MATCHES(
+            tmax += CTimestampTEST{1}, out_of_range, ExceptionMatcher_StartWith("Timestamp overflow: "));
+        REQUIRE_THROWS_MATCHES(near_max += my43ms, out_of_range, ExceptionMatcher_StartWith("Timestamp overflow: "));
     }
 }
 
@@ -150,7 +185,7 @@ TEST_CASE("5: ToString", "[CTimestampTEST]")
 // todo: test FromString()
 TEST_CASE("6: FromString()", "[CTimestampTEST]")
 {
-	auto t1 = CTimestampTEST{};
-	t1.FromString("123456.123456", false);
-	REQUIRE(t1.Count() == 123456123456);
+    auto t1 = CTimestampTEST{};
+    t1.FromString("123456.123456", false);
+    REQUIRE(t1.Count() == 123456123456);
 }
