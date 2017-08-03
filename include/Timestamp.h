@@ -74,7 +74,7 @@ public: // todo: dicision on negtive value?
      * @param ts The timestamp in ratio<1, TIMESTAMP_TO_SECONDS_DIVISOR>.
      * @return The timestamp formatted as a string.
      * @note //when exceed 6.6 bits, keep as it is.*/
-    constexpr static std::string ToString(_Rep ts)
+    constexpr static std::string ToString(_Rep const ts)
     { // "123456.654321" microseconds, "######.######",  i.e. regex: \d{6}\.\d{6}
         if (ts > 0)
         {
@@ -123,7 +123,7 @@ public: // todo: dicision on negtive value?
      * @param bValidateFormat Validate that the format of the timestamp string is ######.######.
      * @return A reference to this timestamp object.
      */
-    constexpr CTimestampBase& FromString(const std::string& sTimeString, bool bValidateFormat = false)
+    constexpr CTimestampBase& FromString(const std::string& sTimeString, bool const bValidateFormat = false)
     { // "123456.654321" microseconds, "######.######",  i.e. regex: \d{6}\.\d{6}
         if (bValidateFormat)
         { // Assumed format: "######.######"
@@ -152,7 +152,7 @@ public: // todo: dicision on negtive value?
      * @param dSeconds The timestamp in seconds.
      * @return A reference to this timestamp object.
      */
-    constexpr CTimestampBase& FromSeconds(double dSeconds)
+    constexpr CTimestampBase& FromSeconds(double const dSeconds)
     {
         if (dSeconds < 0.0)
         {
@@ -174,21 +174,12 @@ public: // todo: dicision on negtive value?
             duration_s_double); // std::chrono::duration_cast(), convert with trunctaion toward zero
         return *this;
     }
-
-    constexpr std::ostream& operator<<(std::ostream& os)
-    {
-        os << _MyTimestamp.count();
-        return os;
-    }
 };
 
-/** The timestamp typedef used in the current version of the CEL.
- *
- * Note:
- * By defining CTimestamp as CTimestampBase<__int64>, the maximum
- * timestamp is greater than 1150 days.
- */
+template<typename _Rep = int64_t, typename _Period = std::ratio<1, TIMESTAMP_TO_SECONDS_DIVISOR>>
+constexpr std::ostream& operator<<(std::ostream& os, const CTimestampBase<_Rep, _Period> &t)
+{
+    return os << t.ToString();
+}
 
 using CTimestamp = CTimestampBase<int64_t, std::micro>;
-
-/* "<<" stream redirection for CTimestamp */

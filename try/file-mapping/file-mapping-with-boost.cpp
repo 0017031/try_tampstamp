@@ -22,3 +22,8 @@ int main (void)
                 std::size_t const mmap_size = mapped_rgn.get_size();
                 return 0;
 }
+
+
+// C:\vs141\VC\Tools\MSVC\14.11.25503\atlmfc\include\atlfile.h
+// W:\heron\src\Heron_000_INT\CommonTools\CommonLogFile\CommonEventLibrary\CEL\src\FileMapping.h
+// CreateFileMapping

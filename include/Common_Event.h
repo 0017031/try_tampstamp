@@ -31,59 +31,45 @@ public:
         TY_HEX_TYPE,      /**< = 6. */
         TY_EVENT_TYPE     /**< = 7. */
     };
-
     enum TY_Tolerance_Source
     {
         TY_METADATA = 1,
         TY_TOLERANCELIST
     };
-
     enum TY_IgnoreFieldName_Source
     {
         TY_METADATA_DONOTCOMPARELIST = 1,
         TY_IGNOREFIELDNAMELIST
     };
 
-    typedef double TY_Real;
-    typedef long TY_Integer;
-    typedef bool TY_Boolean;
-    typedef std::string TY_String;
-    typedef std::string TY_Enum;
-    typedef uint32_t TY_Hex;
-    /*typedef unsigned long TY_Hex;*/
-    typedef std::string TY_Event;
+    using TY_Real = double;
+    using TY_Integer = int32_t;
+    using TY_Boolean = bool;
+    using TY_String = std::string;
+    using TY_Enum = std::string;
+    using TY_Hex = uint32_t;
+    using TY_Event = std::string;
 
-    using Ptr = std::unique_ptr<Common_Event>;
-    /*typedef counted_ptr<Common_Event> Ptr;*/
+    using Ptr = std::unique_ptr<Common_Event>; /*typedef counted_ptr<Common_Event> Ptr;*/
 
     static Ptr Create()
     {
-        /*Ptr sp(new Common_Event());
-        if (!sp.valid())
-          throw std::bad_alloc();*/
-
-        auto sp = std::make_unique<Common_Event>(); // std::make_unique
-        return sp;                                  // May throw std::bad_alloc or any exception thrown by the
-                                                    // constructor of T. If an exception is thrown, this function has no
-                                                    // effect.
+        return std::make_unique<Common_Event>(); // std::make_unique
+                                                 // May throw std::bad_alloc or any exception thrown by the
+                                                 // constructor of T. If an exception is thrown, this function has no
+                                                 // effect.
     }
 
     Ptr Clone()
     {
-        /*Ptr sp(new Common_Event(*this));
-        if (!sp.valid())
-          throw std::bad_alloc();*/
-
-        auto sp = std::make_unique<Common_Event>(*this);
-        return sp;
+		return std::make_unique<Common_Event>(*this);
     }
 
-	Common_Event() = default;
+    Common_Event() = default;
     virtual ~Common_Event();
 
     unsigned int get_data_elements_count() const;
-	std::string get_event_name() const;
-	std::string get_event_source() const;
-	CTimestamp get_event_timestamp() const;
-
+    std::string get_event_name() const;
+    std::string get_event_source() const;
+    CTimestamp get_event_timestamp() const;
 };
