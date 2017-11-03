@@ -12,7 +12,7 @@ int main()
         itr_input_int(std::cin), 
 		itr_input_int(), 
 		[](auto x){ 
-			std::cout << (x * 3) << " " ;
+			std::cout << (x * 3) << "\n\n" ;
 		}
 	);
 }

@@ -1,0 +1,3 @@
+[submodule "include/xml"]
+	path = include/xml
+	url = https://github.com/0017031/xml_cpp11_by_Michael-Chourdakis_at_CodeProject
