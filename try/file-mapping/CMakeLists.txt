@@ -1,14 +1,15 @@
 cmake_minimum_required (VERSION 3.1)
 
-# https://github.com/sakra/cotire
-#set (CMAKE_MODULE_PATH "W:/github-libs/cotire/CMake")
-#include(cotire)
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable (file-mapping-with-boost file-mapping-with-boost.cpp)
-# target_include_directories (cs_string_tst PUBLIC C:/Users/baic/Downloads/work/github-libs/cs_string/src)
+add_executable (file-mapping-with-boost file-mmap.cpp)
+target_include_directories (file-mapping-with-boost
+        PUBLIC
+        r:/msys64/mingw64/include
+        C:/Users/baic/Downloads/DO_NOT_sync/gsl/include)
 
-# To use an existing manually maintained prefix header instead of the automatically generated one, 
-# set the COTIRE_CXX_PREFIX_HEADER_INIT property before invoking cotire:
-#set_target_properties(cs_string_tst PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "stdafx.h")
-#cotire(cs_string_tst)
 
+#add_executable(try_boost.spirit.x3 try_boost.spirit.x3.cpp)
+#target_include_directories (try_boost.spirit.x3
+#        PUBLIC
+#        F:/msys64/mingw64/include)
