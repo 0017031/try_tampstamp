@@ -7,13 +7,13 @@ using namespace Catch;
 
 using CTimestampTEST = CTimestamp;
 
-constexpr auto my_numeric_limits_max = CTimestampTEST::_numeric_limits_max;
-constexpr auto my_numeric_limits_min = -CTimestampTEST::_numeric_limits_max - 1;
+constexpr auto my_numeric_limits_max = CTimestampTEST::numeric_limits_max;
+constexpr auto my_numeric_limits_min = -CTimestampTEST::numeric_limits_max - 1;
 // constexpr auto my_numeric_limits_max = std::numeric_limits<CTimestampTEST::rep>::max();
 // constexpr auto my_numeric_limits_min = std::numeric_limits<CTimestampTEST::rep>::min();
 
-constexpr auto my_min = numeric_limits<CTimestampTEST::rep>::min();
-constexpr auto my_max = numeric_limits<CTimestampTEST::rep>::max();
+constexpr auto my_min = numeric_limits<CTimestampTEST::Rep>::min();
+constexpr auto my_max = numeric_limits<CTimestampTEST::Rep>::max();
 
 TEST_CASE("1 Constuctor", "[CTimestampTEST]")
 {
@@ -76,7 +76,7 @@ TEST_CASE("1 Constuctor", "[CTimestampTEST]")
 
 TEST_CASE("2 this.Count()", "[CTimestampTEST]")
 {
-    auto d = duration<CTimestampTEST::rep, ratio<1, TIMESTAMP_TO_SECONDS_DIVISOR>>{123'456'123'456LL};
+    auto d = duration<CTimestampTEST::Rep, ratio<1, TIMESTAMP_TO_SECONDS_DIVISOR>>{123'456'123'456LL};
     auto t3 = CTimestampTEST{123'456'123'456};
     REQUIRE(t3.Count() == d.count());
 }
