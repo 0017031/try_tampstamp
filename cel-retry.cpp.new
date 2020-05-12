@@ -1,0 +1,49 @@
+
+#include "Timestamp.h"
+//#include <chrono>
+
+using namespace std;
+
+int main() {
+    //
+    //CTimestamp tmax(std::numeric_limits<long long>::max());
+    //CTimestampBase<long long, milli> tmmax2(std::numeric_limits<long long>::max());
+    //
+    //CTimestamp tfloat(99.1234567);
+    //
+    //CTimestamp t2 {};
+
+
+    //CTimestamp t1(42);
+    //CTimestampBase<> tt3 =42; //compile-error if constructor declared explicit
+    //t1 = 4.2;
+
+    //CTimestamp t3(4.2);
+    //CTimestamp tj1(999999.999999);
+    //CTimestamp tj2(1000000.0);
+
+    //CTimestamp tj2(false);
+
+    //TIMESTAMP_TO_SECONDS_DIVISOR
+
+    //fmt::print("{0}, {1}, {2}", 'a', 'b', 'c');
+
+    using CTimestampTEST = CTimestamp;
+
+    constexpr auto my_numeric_limits_max = CTimestampTEST::numeric_limits_max;
+    constexpr auto my_numeric_limits_min = -CTimestampTEST::numeric_limits_max - 1;
+    // constexpr auto my_numeric_limits_max = std::numeric_limits<CTimestampTEST::rep>::max();
+    // constexpr auto my_numeric_limits_min = std::numeric_limits<CTimestampTEST::rep>::min();
+
+    constexpr auto my_min = numeric_limits<CTimestampTEST::Rep>::min();
+    constexpr auto my_max = numeric_limits<CTimestampTEST::Rep>::max();
+
+    auto near_max = CTimestampTEST{my_numeric_limits_max - 42};
+    auto my42ms = CTimestampTEST{42};
+    auto my43ms = CTimestampTEST{43};
+    auto tmax = CTimestampTEST{my_numeric_limits_max};
+
+    auto sum1 = near_max + my42ms;
+
+    return 0;
+}

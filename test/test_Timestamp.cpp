@@ -1,4 +1,11 @@
-#include "stdafx.h"
+#include "catch2_single_file.hpp"
+
+//#include "pch.h"
+
+#include "date.h"
+#include "Timestamp.h"
+#include "test_Timestamp.h"
+ 
 
 using namespace std;
 using namespace chrono;
@@ -19,7 +26,7 @@ TEST_CASE("1 Constuctor", "[CTimestampTEST]")
 {
     SECTION("1.1 constructing from _Rep") // For each SECTION the TEST_CASE is executed from the start
     {
-        REQUIRE(CTimestampTEST{my_numeric_limits_max}.Count() == my_numeric_limits_max);
+        REQUIRE(CTimestampTEST{my_numeric_limits_max/1'000'000}.Count() == my_numeric_limits_max);
         REQUIRE(CTimestampTEST{0}.Count() == 0);
         REQUIRE(CTimestampTEST{-my_numeric_limits_max - 1}.Count() == -my_numeric_limits_max - 1);
     }

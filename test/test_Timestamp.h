@@ -1,5 +1,7 @@
 #pragma once
 
+#include "catch2_single_file.hpp"
+
 #include <iostream>
 
 //#include <cstddef>
@@ -7,9 +9,8 @@
 //#include <cstring>
 //#include <ostream>
 
-#include <catch.hpp>
 #include <chrono>
-#include <ratio_io>
+//#include <ratio_io>
 
 namespace _My_Test
 {
